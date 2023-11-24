@@ -22,6 +22,9 @@ public class Access.Portal : Object {
         out uint32 response,
         out HashTable<string, Variant> results
     ) throws DBusError, IOError {
+
+        // TODO(kggilmer) ~ port the following commented-out block to Regolith
+        /*
         Dialog.ButtonAction action = Dialog.ButtonAction.SUGGESTED;
         string icon = "dialog-information";
         uint register_id = 0;
@@ -36,7 +39,8 @@ public class Access.Portal : Object {
         }
 
         var dialog = new Dialog (action, app_id, parent_window, icon) {
-            primary_text = title,
+            // primary_text = title,
+            text = title,
             secondary_text = sub_title,
             body = body
         };
@@ -105,5 +109,8 @@ public class Access.Portal : Object {
 
         results = _results;
         response = _response;
+        */
+        results = new HashTable<string, Variant> (str_hash, str_equal);
+        response = 2;
     }
 }

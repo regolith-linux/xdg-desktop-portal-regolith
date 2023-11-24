@@ -46,7 +46,8 @@ public class AppChooser.Dialog : Gtk.Window {
 
     construct {
         buttons = new HashTable<string, AppButton> (str_hash, str_equal);
-        AppInfo? info = app_id == "" ? null : new DesktopAppInfo (app_id + ".desktop");
+        // AppInfo? info = app_id == "" ? null : new DesktopAppInfo (app_id + ".desktop");
+        AppInfo info = null;
 
         var primary_text = _("Open file with…");
         if (filename != "") {
@@ -67,7 +68,7 @@ public class AppChooser.Dialog : Gtk.Window {
              wrap = true,
              xalign = 0
         };
-        primary_label.add_css_class (Granite.STYLE_CLASS_TITLE_LABEL);
+        // primary_label.add_css_class (Granite.STYLE_CLASS_TITLE_LABEL);
 
         var secondary_text = _("An application requested to open a %s.").printf (content_description);
         if (info != null) {
@@ -100,18 +101,18 @@ public class AppChooser.Dialog : Gtk.Window {
 
             overlay.add_overlay (badge);
         }
-
+/*
         var placeholder = new Granite.Placeholder (_("No installed apps can open %s").printf (content_description)) {
             description = _("New apps can be installed from AppCenter"),
             icon = new ThemedIcon ("application-default-icon")
         };
-
+*/
         listbox = new Gtk.ListBox () {
             hexpand = true,
             vexpand = true
         };
-        listbox.add_css_class (Granite.STYLE_CLASS_RICH_LIST);
-        listbox.set_placeholder (placeholder);
+        // listbox.add_css_class (Granite.STYLE_CLASS_RICH_LIST);
+        //listbox.set_placeholder (placeholder);
 
         var scrolled_window = new Gtk.ScrolledWindow () {
             child = listbox
@@ -126,7 +127,7 @@ public class AppChooser.Dialog : Gtk.Window {
         open_button = new Gtk.Button.with_label (_("Open")) {
             receives_default = true
         };
-        open_button.add_css_class (Granite.STYLE_CLASS_SUGGESTED_ACTION);
+        // open_button.add_css_class (Granite.STYLE_CLASS_SUGGESTED_ACTION);
 
         var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
             halign = Gtk.Align.END
@@ -145,7 +146,7 @@ public class AppChooser.Dialog : Gtk.Window {
         grid.attach (primary_label, 1, 0);
         grid.attach (secondary_label, 1, 1);
         grid.attach (frame, 0, 3, 2);
-        grid.add_css_class (Granite.STYLE_CLASS_DIALOG_CONTENT_AREA);
+        // grid.add_css_class (Granite.STYLE_CLASS_DIALOG_CONTENT_AREA);
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         box.append (grid);
@@ -169,7 +170,7 @@ public class AppChooser.Dialog : Gtk.Window {
         default_widget = open_button;
 
         add_css_class ("dialog");
-        add_css_class (Granite.STYLE_CLASS_MESSAGE_DIALOG);
+        // add_css_class (Granite.STYLE_CLASS_MESSAGE_DIALOG);
 
         if (parent_window != "") {
             ((Gtk.Widget) this).realize.connect (() => {

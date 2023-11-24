@@ -46,7 +46,7 @@ private void on_bus_acquired (DBusConnection connection, string name) {
 }
 
 private void on_name_acquired () {
-    debug ("org.freedesktop.impl.portal.desktop.pantheon acquired");
+    debug ("org.freedesktop.impl.portal.desktop.regolith acquired");
 
     // We're probably being started by xdg-desktop-portal, which won't be fully initialised until all the backends have loaded.
     // Granite depends on the settings portal to get the style preference, but can't DBus activate it because it's already starting.
@@ -54,6 +54,8 @@ private void on_name_acquired () {
     // appearing before binding the style scheme
     uint watch_id = 0;
     watch_id = Bus.watch_name (BusType.SESSION, "org.freedesktop.portal.Desktop", BusNameWatcherFlags.NONE, () => {
+        debug ("bus watch 2");
+        /*
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();
 
@@ -61,7 +63,7 @@ private void on_name_acquired () {
         granite_settings.notify["prefers-color-scheme"].connect (() => {
             gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
         });
-
+*/
         if (watch_id != 0) {
             Bus.unwatch_name (watch_id);
         }
@@ -84,13 +86,13 @@ int main (string[] args) {
         var opt_context = new OptionContext ("- portal backends");
         opt_context.set_summary ("A backend implementation for xdg-desktop-portal.");
         opt_context.set_description (
-            "xdg-desktop-portal-pantheon provides D-Bus interfaces that\n"
+            "xdg-desktop-portal-regolith provides D-Bus interfaces that\n"
             + "are used by xdg-desktop-portal to implement portals\n"
             + "\n"
             + "Documentation for the available D-Bus interfaces can be found at\n"
             + "https://flatpak.github.io/xdg-desktop-portal/portal-docs.html\n"
             + "\n"
-            + "Please report issues at https://github.com/elementary/xdg-desktop-portal-pantheon/issues"
+            + "Please report issues at https://github.com/elementary/xdg-desktop-portal-regolith/issues"
         );
         opt_context.add_main_entries (OPTIONS_ENTRIES, null);
         opt_context.parse (ref args);
@@ -109,7 +111,7 @@ int main (string[] args) {
         GLib.Environment.set_variable ("G_MESSAGES_DEBUG", "all", false);
     }
 
-    GLib.Environment.set_prgname ("xdg-desktop-portal-pantheon");
+    GLib.Environment.set_prgname ("xdg-desktop-portal-regolith");
     loop = new GLib.MainLoop ();
     outstanding_handles = new GLib.HashTable<string, string> (str_hash, str_equal);
 
@@ -123,7 +125,7 @@ int main (string[] args) {
 
     var owner_id = GLib.Bus.own_name (
         GLib.BusType.SESSION,
-        "org.freedesktop.impl.portal.desktop.pantheon",
+        "org.freedesktop.impl.portal.desktop.regolith",
         GLib.BusNameOwnerFlags.ALLOW_REPLACEMENT | (opt_replace ? GLib.BusNameOwnerFlags.REPLACE : 0),
         on_bus_acquired,
         on_name_acquired,

@@ -11,19 +11,21 @@ public class AppChooser.AppButton : Gtk.ListBoxRow {
     }
 
     construct {
+        /*
         var app_info = new DesktopAppInfo (app_id + ".desktop");
 
         var icon = new Gtk.Image () {
             gicon = app_info.get_icon () ?? new ThemedIcon ("application-default-icon"),
             icon_size = Gtk.IconSize.LARGE
         };
+        */
 
-        var name = new Gtk.Label (app_info.get_display_name ()) {
+        var name = new Gtk.Label ("KGWH") {
             ellipsize = Pango.EllipsizeMode.END
         };
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        box.append (icon);
+        //box.append (icon);
         box.append (name);
 
         child = box;

@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the xdg-desktop-portal-pantheon package.
+# This file is distributed under the same license as the xdg-desktop-portal-regolith package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: xdg-desktop-portal-pantheon\n"
+"Project-Id-Version: xdg-desktop-portal-regolith\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-20 16:20+0000\n"
 "PO-Revision-Date: 2022-09-30 23:18+0000\n"

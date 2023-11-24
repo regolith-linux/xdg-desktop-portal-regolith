@@ -1,97 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2021-2023 elementary, Inc. <contact@elementary.io> -->
 <component>
-  <id>io.elementary.portals</id>
+  <id>io.regolith-desktop.portals</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
-  <compulsory_for_desktop>Pantheon</compulsory_for_desktop>
-  <translation type="gettext">xdg-desktop-portal-pantheon</translation>
+  <compulsory_for_desktop>Regolith</compulsory_for_desktop>
+  <translation type="gettext">xdg-desktop-portal-regolith</translation>
 
-  <name>Portals</name>
+  <name>Regolith Portals</name>
   <summary>Access system features in a secure way</summary>
   <description>
     <p>Portals provide APIs to secure apps which enable them to access system features while requiring informed consent.</p>
   </description>
 
-  <url type="homepage">https://elementary.io/</url>
-  <url type="bugtracker">https://github.com/elementary/portals/issues</url>
-  <url type="donation">https://elementary.io/get-involved#funding</url>
-  <url type="help">https://github.com/elementary/portals/discussions/categories/q-a</url>
-  <url type="translate">https://l10n.elementary.io/engage/desktop/</url>
+  <url type="homepage">https://regolith-desktop.com/</url>
+  <url type="bugtracker">https://github.com/regolith/regolith-desktop/issues</url>
 
-  <developer_name>elementary, Inc.</developer_name>
-  <project_group>elementary</project_group>
-  <update_contact>contact_at_elementary.io</update_contact>
+  <developer_name>Regolith Desktop</developer_name>
+  <project_group>regolith</project_group>
 
   <releases>
-    <release version="7.1.1" data="2023-08-18" urgency="medium">
-      <description>
-        <p>New Features:</p>
-        <ul>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
-    <release version="7.1.0" data="2023-06-26" urgency="medium">
-      <description>
-        <p>New Features:</p>
-        <ul>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-      <issues>
-        <issue url="https://github.com/elementary/portals/issues/68">Background Portal Implementation</issue>
-      </issues>
-    </release>
-
-    <release version="7.0.0" data="2023-02-27" urgency="medium">
-      <description>
-        <p>New Features:</p>
-        <ul>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-      <issues>
-        <issue url="https://github.com/elementary/portals/issues/52">AppChooser doesn't work with mouse</issue>
-        <issue url="https://github.com/elementary/portals/pull/59">AppChooser: Make primary text translatable</issue>
-      </issues>
-    </release>
-
-    <release version="1.2.0" data="2022-10-25" urgency="medium">
-      <description>
-        <p>New Features:</p>
-        <ul>
-          <li>Support dialog parenting on wayland</li>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
-    <release version="1.1.0" date="2022-01-24" urgency="medium">
-      <description>
-        <p>New Features:</p>
-        <ul>
-          <li>Add a destructive action option for access portals</li>
-        </ul>
-        <p>Fixes:</p>
-        <ul>
-          <li>Fix a crash when opening apps in the AppChooser portal</li>
-          <li>Fix window focus and position for Access portals with no parent window</li>
-          <li>Set AppChooser portal as a modal dialog for proper animations</li>
-        </ul>
-      </description>
-    </release>
-
-    <release version="1.0.1" date="2021-10-28" urgency="medium">
-      <description>
-        <p>Fixes:</p>
-        <ul>
-          <li>Prevent delay after logging in</li>
-        </ul>
-      </description>
-    </release>
-
-    <release version="1.0.0" date="2021-10-25" urgency="medium" />
+    <release version="1.0.0" date="2023-12-04" urgency="medium" />
   </releases>
 </component>

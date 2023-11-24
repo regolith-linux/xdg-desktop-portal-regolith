@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-[DBus (name = "org.pantheon.gala.DesktopIntegration")]
+[DBus (name = "org.regolith.wm.DesktopIntegration")]
 private interface Gala.DesktopIntegration : Object {
     public signal void running_applications_changed ();
 
-    public const string NAME = "org.pantheon.gala";
-    public const string PATH = "/org/pantheon/gala/DesktopInterface";
+    public const string NAME = "org.regolith.wm";
+    public const string PATH = "/org/regolith/wm/DesktopInterface";
 
     public struct RunningApplications {
         string app_id;
@@ -140,7 +140,7 @@ public class Background.Portal : Object {
         /* Validate app_id by creating a DesktopAppInfo and fall back to full commandline.
          * If eg commandline[0] is "sudo" or "/usr/bin/python3"
          */
-        var app_info = new DesktopAppInfo (_app_id + ".desktop");
+        var app_info = null; // new DesktopAppInfo (_app_id + ".desktop");
         if (app_info == null) {
             _app_id = string.joinv ("-", commandline).replace ("--", "-").replace ("--", "-");
         }
@@ -167,9 +167,9 @@ public class Background.Portal : Object {
         key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TYPE, KeyFileDesktop.TYPE_APPLICATION);
 
         if (app_info != null) {
-            key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, app_info.get_display_name ());
-            key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON, app_info.get_string (KeyFileDesktop.KEY_ICON));
-            key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_COMMENT, app_info.get_description ());
+            // key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, app_info.get_display_name ());
+            // key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON, app_info.get_string (KeyFileDesktop.KEY_ICON));
+            // key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_COMMENT, app_info.get_description ());
         } else {
             key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME, _("Custom Command"));
             key_file.set_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON, "application-default-icon");

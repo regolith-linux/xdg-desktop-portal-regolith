@@ -1,11 +1,11 @@
-# English translations for xdg-desktop-portal-pantheon package.
-# Copyright (C) 2021 THE xdg-desktop-portal-pantheon'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the xdg-desktop-portal-pantheon package.
+# English translations for xdg-desktop-portal-regolith package.
+# Copyright (C) 2021 THE xdg-desktop-portal-regolith'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the xdg-desktop-portal-regolith package.
 # Automatically generated, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: xdg-desktop-portal-pantheon\n"
+"Project-Id-Version: xdg-desktop-portal-regolith\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-20 16:20+0000\n"
 "PO-Revision-Date: 2023-07-23 07:07+0000\n"

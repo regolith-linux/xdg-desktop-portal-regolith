@@ -1,4 +1,4 @@
-src/XdgDesktopPortalPantheon.vala
+src/XdgDesktopPortalRegolith.vala
 src/ExternalWindow.vala
 src/Access/Portal.vala
 src/Access/Dialog.vala

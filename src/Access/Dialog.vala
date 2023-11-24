@@ -4,7 +4,7 @@
  */
 
 [DBus (name = "org.freedesktop.impl.portal.Request")]
-public class Access.Dialog : Granite.MessageDialog {
+public class Access.Dialog : Gtk.MessageDialog {
     public enum ButtonAction {
         SUGGESTED,
         DESTRUCTIVE
@@ -45,7 +45,7 @@ public class Access.Dialog : Granite.MessageDialog {
             action: action,
             app_id: app_id,
             parent_window: parent_window,
-            image_icon: new ThemedIcon (icon),
+            // image_icon: new ThemedIcon (icon),
             buttons: Gtk.ButtonsType.NONE
         );
     }
@@ -55,24 +55,24 @@ public class Access.Dialog : Granite.MessageDialog {
         modal = true;
 
         choices = new List<Choice> ();
-
+/*
         if (app_id != "") {
             badge_icon = new DesktopAppInfo (app_id + ".desktop").get_icon ();
         }
-
+*/
         deny_button = add_button (_("Deny Access"), Gtk.ResponseType.CANCEL) as Gtk.Button;
         grant_button = add_button (_("Grant Access"), Gtk.ResponseType.OK) as Gtk.Button;
 
         if (action == ButtonAction.SUGGESTED) {
-            grant_button.add_css_class (Granite.STYLE_CLASS_SUGGESTED_ACTION);
+            // grant_button.add_css_class (Granite.STYLE_CLASS_SUGGESTED_ACTION);
             default_widget = grant_button;
         } else {
-            grant_button.add_css_class (Granite.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            // grant_button.add_css_class (Granite.STYLE_CLASS_DESTRUCTIVE_ACTION);
             default_widget = deny_button;
         }
 
-        custom_bin.orientation = Gtk.Orientation.VERTICAL;
-        custom_bin.spacing = 6;
+        // custom_bin.orientation = Gtk.Orientation.VERTICAL;
+        // custom_bin.spacing = 6;
     }
 
     public override void show () {
@@ -100,7 +100,7 @@ public class Access.Dialog : Granite.MessageDialog {
     [DBus (visible = false)]
     public void add_choice (Choice choice) {
         choices.append (choice);
-        custom_bin.append (choice);
+        // custom_bin.append (choice);
     }
 
     [DBus (visible = false)]

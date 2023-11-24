@@ -1,10 +1,10 @@
 install_data(
-    'pantheon.portal',
+    'regolith.portal',
     install_dir: datadir / 'xdg-desktop-portal' / 'portals'
 )
 
 configure_file(
-    input: 'org.freedesktop.impl.portal.desktop.pantheon.service.in',
+    input: 'org.freedesktop.impl.portal.desktop.regolith.service.in',
     output: '@BASENAME@',
     configuration: conf_data,
     install: true,

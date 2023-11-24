@@ -1,7 +1,7 @@
 executable(
     meson.project_name(),
     'Access/Choice.vala',
-    'Access/Dialog.vala',
+    # 'Access/Dialog.vala',
     'Access/Portal.vala',
     'AppChooser/AppButton.vala',
     'AppChooser/Dialog.vala',
@@ -10,12 +10,11 @@ executable(
     'Background/Portal.vala',
     configure_file(input: 'Config.vala.in', output: '@BASENAME@', configuration: conf_data),
     'ExternalWindow.vala',
-    'XdgDesktopPortalPantheon.vala',
+    'XdgDesktopPortalRegolith.vala',
     dependencies: [
         glib_dep,
         gobject_dep,
         gio_dep,
-        granite_dep,
         gtk_deps,
         x11_dep
     ],

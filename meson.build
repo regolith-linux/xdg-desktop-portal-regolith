@@ -1,4 +1,4 @@
-project('xdg-desktop-portal-pantheon', 'c', 'vala', version: '7.1.1', meson_version: '>=0.58')
+project('xdg-desktop-portal-regolith', 'c', 'vala', version: '7.1.1', meson_version: '>=0.58')
 
 i18n = import('i18n')
 
@@ -12,7 +12,6 @@ systemd_dep = dependency('systemd')
 glib_dep = dependency('glib-2.0')
 gobject_dep = dependency('gobject-2.0')
 gio_dep = dependency('gio-2.0')
-granite_dep = dependency('granite-7')
 
 gtk_deps = [
     dependency('gtk4')
