@@ -1,0 +1,25 @@
+Source: xdg-desktop-portal-regolith
+Section: x11
+Priority: optional
+Maintainer: Ken Gilmer <kgilmer@gmail.com>
+Build-Depends: debhelper (>= 10),
+               gettext,
+               libgtk-4-dev,
+               meson,
+               libglib2.0-dev,
+               valac-0.56-vapi,
+               po-debconf, 
+               valac-bin, 
+               intltool
+Standards-Version: 4.1.2
+Homepage: https://github.com/regolith-linux/xdg-desktop-portal-regolith
+
+Package: xdg-desktop-portal-regolith
+Architecture: any
+Depends: 
+  ${shlibs:Depends}, 
+  ${misc:Depends},
+  libjsonrpc-glib-1.0-dev
+Description: Regolith XDG Portal backend
+ Provides access to desktop features to sandboxed apps.
+
