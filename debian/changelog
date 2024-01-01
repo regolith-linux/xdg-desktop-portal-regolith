@@ -1,3 +1,9 @@
+xdg-desktop-portal-regolith (0.2.0-1) focal; urgency=medium
+
+  * feat: add (empty) settings to test
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sun, 31 Dec 2023 16:26:08 -0800
+
 xdg-desktop-portal-regolith (0.1.0-1) focal; urgency=medium
 
   * Initial Release 
