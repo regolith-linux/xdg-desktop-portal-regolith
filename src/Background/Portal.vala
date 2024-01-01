@@ -2,44 +2,14 @@
  * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
-
-[DBus (name = "org.regolith.wm.DesktopIntegration")]
-private interface Gala.DesktopIntegration : Object {
-    public signal void running_applications_changed ();
-
-    public const string NAME = "org.regolith.wm";
-    public const string PATH = "/org/regolith/wm/DesktopInterface";
-
-    public struct RunningApplications {
-        string app_id;
-        HashTable<string,Variant> details;
-    }
-
-    public abstract async RunningApplications[] get_running_applications () throws DBusError, IOError;
-}
-
 [DBus (name = "org.freedesktop.impl.portal.Background")]
 public class Background.Portal : Object {
     public signal void running_applications_changed ();
 
-    private Gala.DesktopIntegration? desktop_integration;
     private DBusConnection connection;
 
     public Portal (DBusConnection connection) {
         this.connection = connection;
-
-        connection.get_proxy.begin<Gala.DesktopIntegration> (
-            Gala.DesktopIntegration.NAME,
-            Gala.DesktopIntegration.PATH,
-            NONE, null, (obj, res) => {
-                try {
-                    desktop_integration = connection.get_proxy.end (res);
-                    desktop_integration.running_applications_changed.connect (() => running_applications_changed ());
-                } catch {
-                    warning ("Cannot connect to compositor, portal working with reduced functionality.");
-                }
-            }
-        );
     }
 
     [CCode (type_signature = "u")]
@@ -50,8 +20,10 @@ public class Background.Portal : Object {
     }
 
     public async HashTable<string, Variant> get_app_state () throws DBusError, IOError {
+        throw new DBusError.FAILED ("Not implemented");
+        /*
         if (desktop_integration == null) {
-            throw new DBusError.FAILED ("No connection to compositor.");
+            
         }
 
         var results = new HashTable<string, Variant> (null, null);
@@ -69,6 +41,7 @@ public class Background.Portal : Object {
         }
 
         return results;
+         */
     }
 
     public async void notify_background (

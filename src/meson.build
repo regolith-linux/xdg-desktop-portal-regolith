@@ -8,6 +8,7 @@ executable(
     'AppChooser/Portal.vala',
     'Background/NotificationRequest.vala',
     'Background/Portal.vala',
+    'Settings/Portal.vala',
     configure_file(input: 'Config.vala.in', output: '@BASENAME@', configuration: conf_data),
     'ExternalWindow.vala',
     'XdgDesktopPortalRegolith.vala',
