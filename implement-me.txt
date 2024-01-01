@@ -1,0 +1,19 @@
+  [X] org.freedesktop.impl.portal.Account
+  [X] org.freedesktop.impl.portal.AppChooser
+  [X] org.freedesktop.impl.portal.Background
+  [X] org.freedesktop.impl.portal.Clipboard
+  [X] org.freedesktop.impl.portal.DynamicLauncher
+  [X] org.freedesktop.impl.portal.FileChooser
+  [X] org.freedesktop.impl.portal.InputCapture
+  [X] org.freedesktop.impl.portal.Lockdown
+  [X] org.freedesktop.impl.portal.Print
+  [X] org.freedesktop.impl.portal.RemoteDesktop
+  [X] org.freedesktop.impl.portal.ScreenCast
+  [X] org.freedesktop.impl.portal.Screenshot
+  [X] org.freedesktop.impl.portal.Settings
+  [X] org.freedesktop.impl.portal.Wallpaper
+
+
+X = NO-OP implementation
+M = Minimal functional implementation
+O = Complete functional implementation

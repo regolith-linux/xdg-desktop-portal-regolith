@@ -1,3 +1,9 @@
+xdg-desktop-portal-regolith (0.3.0-1) focal; urgency=medium
+
+  * feat: implement no-op services for those provided by gnome backend
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Mon, 01 Jan 2024 12:43:44 -0800
+
 xdg-desktop-portal-regolith (0.2.0-1) focal; urgency=medium
 
   * feat: add (empty) settings to test

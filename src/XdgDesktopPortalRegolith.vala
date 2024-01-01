@@ -35,14 +35,47 @@ private void on_bus_acquired (DBusConnection connection, string name) {
         connection.register_object ("/org/freedesktop/portal/desktop", new Access.Portal (connection));
         debug ("Access Portal registered!");
 
+        connection.register_object ("/org/freedesktop/portal/desktop", new Account.Portal (connection));
+        debug ("Account Portal registered!");
+
         connection.register_object ("/org/freedesktop/portal/desktop", new AppChooser.Portal (connection));
         debug ("AppChooser Portal registered!");
 
         connection.register_object ("/org/freedesktop/portal/desktop", new Background.Portal (connection));
         debug ("Background Portal registered!");
 
+        connection.register_object ("/org/freedesktop/portal/desktop", new Clipboard.Portal (connection));
+        debug ("Clipboard Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new DynamicLauncher.Portal (connection));
+        debug ("DynamicLauncher Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new FileChooser.Portal (connection));
+        debug ("FileChooser Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new InputCapture.Portal (connection));
+        debug ("InputCapture Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new Lockdown.Portal (connection));
+        debug ("Lockdown Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new Print.Portal (connection));
+        debug ("Print Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new RemoteDesktop.Portal (connection));
+        debug ("RemoteDesktop Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new ScreenCast.Portal (connection));
+        debug ("ScreenCast Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new Screenshot.Portal (connection));
+        debug ("Screenshot Portal registered!");
+
         connection.register_object ("/org/freedesktop/portal/desktop", new Settings.Portal (connection));
         debug ("Settings Portal registered!");
+
+        connection.register_object ("/org/freedesktop/portal/desktop", new Wallpaper.Portal (connection));
+        debug ("Wallpaper Portal registered!");
     } catch (Error e) {
         critical ("Unable to register the object: %s", e.message);
     }

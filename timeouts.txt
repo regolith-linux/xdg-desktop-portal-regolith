@@ -4,3 +4,5 @@
 2023-12-30T16:46:46.135597-08:00 ltpt systemd[2529]: xdg-desktop-portal.service: Failed with result 'timeout'.
 2023-12-30T16:46:46.136276-08:00 ltpt systemd[2529]: Failed to start xdg-desktop-portal.service - Portal service.
 
+2023-12-31T16:52:41.451067-08:00 ltpt xdg-desktop-por[2431]: Failed to create file chooser proxy: Error calling StartServiceByName for org.freedesktop.impl.portal.desktop.gnome: Timeout was reached
+2023-12-31T16:53:06.842975-08:00 ltpt xdg-desktop-por[2431]: Failed to create print proxy: Error calling StartServiceByName for org.freedesktop.impl.portal.desktop.gnome: Timeout was reached
