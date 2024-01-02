@@ -28,12 +28,3 @@ configure_file(
     install: true,
     install_dir: systemduserunitdir
 )
-
-i18n.merge_file(
-    input: 'portals.metainfo.xml.in',
-    output: 'io.elementary.portals.metainfo.xml',
-    po_dir: meson.project_source_root() / 'po' / 'extra',
-    type: 'xml',
-    install: true,
-    install_dir: datadir / 'metainfo'
-)

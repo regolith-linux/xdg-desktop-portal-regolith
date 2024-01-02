@@ -1,7 +1,5 @@
 project('xdg-desktop-portal-regolith', 'c', 'vala', version: '7.1.1', meson_version: '>=0.58')
 
-i18n = import('i18n')
-
 prefix = get_option('prefix')
 datadir = prefix / get_option('datadir')
 libexecdir = prefix / get_option('libexecdir')
@@ -43,5 +41,4 @@ conf_data.set_quoted('LOCALEDIR', localedir)
 conf_data.set_quoted('VERSION', meson.project_version())
 
 subdir('data')
-subdir('po')
 subdir('src')
