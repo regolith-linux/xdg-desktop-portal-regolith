@@ -3,6 +3,11 @@ install_data(
     install_dir: datadir / 'xdg-desktop-portal' / 'portals'
 )
 
+install_data(
+    'regolith-portals.conf',
+    install_dir: datadir / 'xdg-desktop-portal'
+)
+
 configure_file(
     input: 'org.freedesktop.impl.portal.desktop.regolith.service.in',
     output: '@BASENAME@',
