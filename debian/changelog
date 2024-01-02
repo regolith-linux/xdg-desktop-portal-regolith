@@ -1,3 +1,15 @@
+xdg-desktop-portal-regolith (0.3.1-1) focal; urgency=medium
+
+  [ Soumya Ranjan Patnaik ]
+  * fix: register all the gnome interfaces with xdp in the portal file
+
+  [ Regolith Linux ]
+  * fix: throw error as described in docs to avoid crash
+  * chore: enable debug logging in portal backend for development, to be reverted in the future
+  * chore: remove dead code from upstream
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Tue, 02 Jan 2024 11:13:06 -0800
+
 xdg-desktop-portal-regolith (0.3.0-1) focal; urgency=medium
 
   * feat: implement no-op services for those provided by gnome backend
