@@ -1,3 +1,10 @@
+xdg-desktop-portal-regolith (0.3.2-1) focal; urgency=medium
+
+  * fix: add desktop session portals conf for Regolith
+  * chore: remove upstream localization files
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Tue, 02 Jan 2024 14:35:09 -0800
+
 xdg-desktop-portal-regolith (0.3.1-1) focal; urgency=medium
 
   [ Soumya Ranjan Patnaik ]
