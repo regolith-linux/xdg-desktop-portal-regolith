@@ -4,4 +4,4 @@ Description=Portal service (Regolith implementation)
 [Service]
 Type=dbus
 BusName=org.freedesktop.impl.portal.desktop.regolith
-ExecStart=@LIBEXECDIR@/xdg-desktop-portal-regolith
+ExecStart=@LIBEXECDIR@/xdg-desktop-portal-regolith -v

@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.freedesktop.impl.portal.desktop.regolith
-Exec=@LIBEXECDIR@/xdg-desktop-portal-regolith
+Exec=@LIBEXECDIR@/xdg-desktop-portal-regolith -v
 SystemdService=xdg-desktop-portal-regolith.service
