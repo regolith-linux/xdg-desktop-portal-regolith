@@ -15,7 +15,7 @@ public class Settings.Portal : Object {
     [DBus (name = "Read")]
     public async GLib.Variant read(string namespace_, string key) throws DBusError, IOError {
         debug ("Settings.Read");
-        return new Variant.maybe(null, null);
+        throw new IOError.INVALID_ARGUMENT("Requested key could not be found.");
     }
 
     [DBus (name = "SettingChanged")]
