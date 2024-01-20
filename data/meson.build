@@ -4,7 +4,7 @@ install_data(
 )
 
 install_data(
-    'regolith-portals.conf',
+    ['regolith-x11-portals.conf', 'regolith-wayland-portals.conf'],
     install_dir: datadir / 'xdg-desktop-portal'
 )
 

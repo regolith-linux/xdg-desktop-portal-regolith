@@ -1,0 +1,6 @@
+usr/lib/systemd/user/xdg-desktop-portal-regolith.service
+usr/lib/x86_64-linux-gnu/xdg-desktop-portal-regolith
+usr/share/dbus-1/services/org.freedesktop.impl.portal.desktop.regolith.service
+usr/share/doc/xdg-desktop-portal-regolith/changelog.Debian.gz
+usr/share/doc/xdg-desktop-portal-regolith/copyright
+usr/share/xdg-desktop-portal/portals/regolith.portal
