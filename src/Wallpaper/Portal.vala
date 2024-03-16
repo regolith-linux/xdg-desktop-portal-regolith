@@ -53,6 +53,7 @@ public class Wallpaper.Portal : Object {
             get_uri = Uri.parse(uri, UriFlags.NONE).get_path();
         } catch (GLib.UriError e) {
             stderr.printf("Error parsing URI: %s\n", e.message);
+            return 2;
         }
 
         bool show_preview = false;
