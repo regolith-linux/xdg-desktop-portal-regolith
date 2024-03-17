@@ -1,3 +1,11 @@
+/* Refer to the provided link for the response codes.
+
+https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Request.html#org-freedesktop-portal-request
+
+0: Success; the request is executed.
+1: The user cancelled the interaction.
+2: The user interaction concluded in an alternate manner.*/
+
 [DBus (name = "org.freedesktop.impl.portal.Wallpaper")]
 public class Wallpaper.Portal : Object {
     private DBusConnection connection;
