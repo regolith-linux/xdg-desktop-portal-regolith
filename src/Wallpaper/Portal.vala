@@ -18,22 +18,13 @@ public class Wallpaper.Portal : Object {
         this.connection = connection;
     }
 
-    void reload_session() {
-        string? session_type = Environment.get_variable("XDG_SESSION_TYPE");
-    
-        if (session_type != null) {
-            if (session_type == "wayland") {
-                // For Sway session, reload by restarting the compositor
-                Process.spawn_command_line_async("swaymsg reload");
-            } else if (session_type == "x11") {
-                // For i3 session, reload by restarting the window manager
-                Process.spawn_command_line_async("i3-msg restart");
-            } else {
-                stdout.printf("Unsupported session type: %s\n", session_type);
-            }
-        } else {
-            // XDG_SESSION_TYPE environment variable not set
-            stdout.printf("XDG_SESSION_TYPE environment variable not found\n");
+    void reload_session() {        
+        try{
+            stdout.printf("Reloading session\n");
+            Process.spawn_command_line_async("regolith-look refresh");
+        }
+        catch(Error e){
+            stderr.printf("Error reloading session: %s\n", e.message);
         }
     }
 
@@ -90,10 +81,8 @@ public class Wallpaper.Portal : Object {
     }
 
     public void update_xresources_wallpaper(string wallpaper_url, string key) throws Error {
-         // Define the path to the Xresources file
-        string xresources_file_path = Path.build_filename(Environment.get_home_dir(), ".config", "regolith", "Xresources");
+        string xresources_file_path = Path.build_filename(Environment.get_home_dir(), ".config", "regolith3", "Xresources");
 
-         // Check if the directory exists, create it if not
         File directory = File.new_for_path(Path.get_dirname(xresources_file_path));
         if (!directory.query_exists()) {
             try {
@@ -105,16 +94,13 @@ public class Wallpaper.Portal : Object {
             }
         }
 
-         // Now proceed to check and create the file
         File file = File.new_for_path(xresources_file_path);
 
-        // Check if the file exists
         if (!file.query_exists()) {
             stdout.printf("Xresources file does not exist: %s\n", xresources_file_path);
             // Create the file if it doesn't exist
             try {
                 GLib.FileOutputStream? fs = file.create(FileCreateFlags.NONE);
-                // Close the file stream after creating
                 if (fs != null)
                     fs.close(null);
                 stdout.printf("Xresources file created: %s\n", xresources_file_path);
@@ -140,14 +126,11 @@ public class Wallpaper.Portal : Object {
 
             
             if (contents != null) {
-                // Convert contents from bytes to string
                 string contentsString = (string)contents;
 
-               // Check if key exists for regolith.wallpaper.file and update it, if it doesn't exist create one
                 string line = key + ": " + wallpaper_url + "\n";
 
                 if (contentsString.contains(key)) {
-                    // Replace the existing line
 
                     int index = contentsString.index_of(key);
                     int newlineIndex = contentsString.index_of("\n", index);
@@ -159,14 +142,11 @@ public class Wallpaper.Portal : Object {
 
                     contentsString = contentsString.replace( old_line, line);
                 } else {
-                    // Add the new line
                     contentsString += line;
                 }
 
-                // Convert contents back to bytes
                 uint8[] modifiedContents = (uint8[])contentsString.data;
 
-                // Write back modified contents
                 file.replace_contents(modifiedContents, null, false, FileCreateFlags.NONE, null);
             }
         } catch (Error e) {
@@ -176,9 +156,6 @@ public class Wallpaper.Portal : Object {
         
     }
     
-    
-    
-
 
     private void set_gsettings(string schema, string key, string uri,string key_wallpaper) throws Error {
        
