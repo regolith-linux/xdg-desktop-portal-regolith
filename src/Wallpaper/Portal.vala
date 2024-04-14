@@ -30,7 +30,6 @@ public class Wallpaper.Portal : Object {
 
 
     public void show_preview_image(string uri, string parent_window, string set_on) throws GLib.Error {
-
         var window = new Gtk.Window();
         window.title = "Image Preview";
         window.set_default_size(400, 400);
@@ -71,8 +70,6 @@ public class Wallpaper.Portal : Object {
 
         buttonBox.append(cancelButton);
         buttonBox.append(proceedButton);
-
-
 
 
         window.set_child(box);
@@ -128,6 +125,9 @@ public class Wallpaper.Portal : Object {
             if (contents != null) {
                 string contentsString = (string)contents;
 
+                Regex regex = new Regex("^\\s*!.*" + key + ".*$", RegexCompileFlags.MULTILINE);
+                contentsString = regex.replace(contentsString, contentsString.length , 0 , "");
+
                 string line = key + ": " + wallpaper_url + "\n";
 
                 if (contentsString.contains(key)) {
@@ -140,10 +140,9 @@ public class Wallpaper.Portal : Object {
                     stdout.printf("old_line: %s", old_line);
 
 
-                    contentsString = contentsString.replace( old_line, line);
-                } else {
-                    contentsString += line;
+                    contentsString = contentsString.replace(old_line, "!" + old_line);
                 }
+                contentsString += line;
 
                 uint8[] modifiedContents = (uint8[])contentsString.data;
 
