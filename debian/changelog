@@ -1,3 +1,9 @@
+xdg-desktop-portal-regolith (0.3.5-2) jammy; urgency=medium
+
+  * fix: add missing systemd dependency to control to fix build on oracular
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sat, 19 Oct 2024 14:21:59 -0700
+
 xdg-desktop-portal-regolith (0.3.5) focal; urgency=medium
 
   [ Soumya Ranjan Patnaik ]
