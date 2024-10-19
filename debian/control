@@ -4,20 +4,21 @@ Priority: optional
 Maintainer: Ken Gilmer <kgilmer@gmail.com>
 Build-Depends: debhelper (>= 10),
                gettext,
+               intltool,
+               libglib2.0-dev,
                libgtk-4-dev,
                meson,
-               libglib2.0-dev,
+               po-debconf,
+               systemd-dev,
                valac-0.56-vapi,
-               po-debconf, 
-               valac-bin, 
-               intltool
+               valac-bin
 Standards-Version: 4.1.2
 Homepage: https://github.com/regolith-linux/xdg-desktop-portal-regolith
 
 Package: xdg-desktop-portal-regolith
 Architecture: any
-Depends: 
-  ${shlibs:Depends}, 
+Depends:
+  ${shlibs:Depends},
   ${misc:Depends},
   libjsonrpc-glib-1.0-dev
 Description: Regolith XDG Portal backend
@@ -25,12 +26,12 @@ Description: Regolith XDG Portal backend
 
 Package: xdg-desktop-portal-regolith-x11-config
 Architecture: any
-Depends: 
+Depends:
   xdg-desktop-portal-regolith
 Description: Regolith X11 XDG Portal configuration file
 
 Package: xdg-desktop-portal-regolith-wayland-config
 Architecture: any
-Depends: 
+Depends:
   xdg-desktop-portal-regolith
 Description: Regolith Wayland XDG Portal configuration file
