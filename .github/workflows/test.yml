@@ -1,0 +1,40 @@
+name: Build Package
+
+on:
+  push:
+
+jobs:
+  matrix-builder:
+    runs-on: ubuntu-24.04
+    outputs:
+      includes: ${{ steps.builder.outputs.includes }}
+    steps:
+      - name: Build Matrix
+        id: builder
+        uses: regolith-linux/test-desktop-installable-action/build-matrix@main
+
+  build:
+    runs-on: ubuntu-24.04
+    container: "${{ matrix.distro }}:${{ matrix.codename }}"
+    needs: matrix-builder
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # - name: Import GPG Key
+      #   uses: regolith-linux/test-desktop-installable-action/import-gpg@import-gpg
+  
+      - name: Build Package
+        uses: regolith-linux/test-desktop-installable-action/build-package@build-package
+        with:
+          name: "xdg-desktop-portal-regolith"
+          repo: "https://github.com/${{ github.repository }}"
+          ref: "actions"
+          # ref: "${{ github.ref }}"
+          # sha: "${{ github.sha }}"
+          distro: "${{ matrix.distro }}"
+          codename: "${{ matrix.codename }}"
