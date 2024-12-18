@@ -1,43 +1,56 @@
-name: Test Package
+name: Test Build
 
 on:
   pull_request:
 
 jobs:
-  matrix-builder:
+  variables:
     runs-on: ubuntu-24.04
-    outputs:
-      includes: ${{ steps.builder.outputs.includes }}
     steps:
       - name: Build Matrix
-        id: builder
-        uses: regolith-linux/actions/build-matrix@main
+        run: |
+          echo "github.event.repository.name: '${{ github.event.repository.name }}'"
+          echo "github.repository: '${{ github.repository }}'"
+          echo "github.base_ref: '${{ github.base_ref }}'"
+          echo "github.ref_name: '${{ github.ref_name }}'"
 
-  build:
-    runs-on: ubuntu-24.04
-    container: "${{ matrix.distro }}:${{ matrix.codename }}"
-    needs: matrix-builder
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # matrix-builder:
+  #   runs-on: ubuntu-24.04
+  #   outputs:
+  #     includes: ${{ steps.builder.outputs.includes }}
+  #   steps:
+  #     - name: Build Matrix
+  #       id: builder
+  #       uses: regolith-linux/actions/build-matrix@main
+  #       with:
+  #         name: ""
+  #         repo: "https://github.com/${{ github.repository }}.git"
+  #         ref: "${{ github.base_ref }}"
+  #         # ref: "${{ github.ref_name }}"
 
-      - name: Import GPG Key
-        uses: regolith-linux/actions/import-gpg@main
-        with:
-          gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+  # build:
+  #   runs-on: ubuntu-24.04
+  #   container: "${{ matrix.distro }}:${{ matrix.codename }}"
+  #   needs: matrix-builder
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+  #   steps:
+  #     # - name: Checkout
+  #     #   uses: actions/checkout@v4
+
+  #     - name: Import GPG Key
+  #       uses: regolith-linux/actions/import-gpg@main
+  #       with:
+  #         gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
   
-      - name: Build Package
-        uses: regolith-linux/actions/build-package@build-package
-        with:
-          name: "xdg-desktop-portal-regolith"
-          repo: "https://github.com/${{ github.repository }}"
-          ref: "actions"
-          # ref: "${{ github.ref }}"
-          # sha: "${{ github.sha }}"
-          distro: "${{ matrix.distro }}"
-          codename: "${{ matrix.codename }}"
-          stage: "unstable"
+  #     - name: Build Package
+  #       uses: regolith-linux/actions/build-package@build-package
+  #       with:
+  #         name: "xdg-desktop-portal-regolith"
+  #         repo: "https://github.com/${{ github.repository }}"
+  #         ref: "${{ github.ref_name }}" # TODO
+  #         distro: "${{ matrix.distro }}"
+  #         codename: "${{ matrix.codename }}"
+  #         stage: "unstable"
