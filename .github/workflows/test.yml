@@ -40,3 +40,4 @@ jobs:
           # sha: "${{ github.sha }}"
           distro: "${{ matrix.distro }}"
           codename: "${{ matrix.codename }}"
+          stage: "unstable"
