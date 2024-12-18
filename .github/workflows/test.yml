@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Import GPG Key
-        uses: regolith-linux/actions/import-gpg@import-gpg
+        uses: regolith-linux/actions/import-gpg@main
         with:
           gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
   
