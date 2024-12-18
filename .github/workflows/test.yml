@@ -1,7 +1,7 @@
-name: Build Package
+name: Test Package
 
 on:
-  push:
+  pull_request:
 
 jobs:
   matrix-builder:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Build Matrix
         id: builder
-        uses: regolith-linux/test-desktop-installable-action/build-matrix@main
+        uses: regolith-linux/actions/build-matrix@main
 
   build:
     runs-on: ubuntu-24.04
@@ -25,11 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Import GPG Key
-      #   uses: regolith-linux/test-desktop-installable-action/import-gpg@import-gpg
+      - name: Import GPG Key
+        uses: regolith-linux/actions/import-gpg@import-gpg
+        with:
+          gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
   
       - name: Build Package
-        uses: regolith-linux/test-desktop-installable-action/build-package@build-package
+        uses: regolith-linux/actions/build-package@build-package
         with:
           name: "xdg-desktop-portal-regolith"
           repo: "https://github.com/${{ github.repository }}"
