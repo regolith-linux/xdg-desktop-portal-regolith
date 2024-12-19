@@ -3,21 +3,7 @@ name: Test Build
 on:
   pull_request:
 
-env:
-  stage: "unstable"
-
 jobs:
-  # variables:
-  #   runs-on: ubuntu-24.04
-  #   steps:
-  #     - name: Build Matrix
-  #       run: |
-  #         echo "github.event.repository.name: '${{ github.event.repository.name }}'"
-  #         echo "github.repository: '${{ github.repository }}'"
-  #         echo "github.base_ref: '${{ github.base_ref }}'"
-  #         echo "github.ref_name: '${{ github.ref_name }}'"
-  #         echo "github.ref: '${{ github.ref }}'"
-
   matrix-builder:
     runs-on: ubuntu-24.04
     outputs:
@@ -29,7 +15,7 @@ jobs:
         with:
           name: "${{ github.event.repository.name }}"
           ref: "${{ github.base_ref }}"
-          stage: "${{ env.stage }}"
+          stage: "unstable"
 
   build:
     runs-on: ubuntu-24.04
@@ -43,21 +29,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Import GPG Key
-        uses: regolith-linux/actions/import-gpg@main
+      - name: Build Package
+        uses: regolith-linux/actions/build-package@enhance-build-matrix
         with:
+          name: "${{ github.event.repository.name }}"
+          distro: "${{ matrix.distro }}"
+          codename: "${{ matrix.codename }}"
+          stage: "unstable"
+          suite: "unstable"
+          component: "main"
+          arch: "amd64"
           gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
-  
-      # - name: Build Package
-      #   uses: regolith-linux/actions/build-package@enhance-build-matrix
-      #   with:
-      #     name: "${{ github.event.repository.name }}"
-      #     # repo: "https://github.com/${{ github.repository }}"
-      #     # ref: "${{ github.ref_name }}" # TODO
-      #     # ref: "${{ github.ref }}" # TODO
-      #     distro: "${{ matrix.distro }}"
-      #     codename: "${{ matrix.codename }}"
-      #     stage: "${{ env.stage }}"
-      #     suite: "${{ env.stage }}"
-      #     component: "main"
-      #     arch: "amd64"
