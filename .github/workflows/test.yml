@@ -9,6 +9,13 @@ jobs:
     outputs:
       includes: ${{ steps.builder.outputs.includes }}
     steps:
+      - name: Environment Setup
+        run: |
+          if ! command -v sudo 2>&1 >/dev/null; then
+            apt update
+            DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends sudo
+          fi
+
       - name: Build Matrix
         id: builder
         uses: regolith-linux/actions/build-matrix@enhance-build-matrix
@@ -29,6 +36,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Environment Setup
+        run: |
+          if ! command -v sudo 2>&1 >/dev/null; then
+            apt update
+            DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends sudo
+          fi
+  
       - name: Build Package
         uses: regolith-linux/actions/build-package@enhance-build-matrix
         with:
