@@ -40,3 +40,15 @@ jobs:
           component: "main"
           arch: "amd64"
           gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+          
+      - name: find files
+        run: |
+          find "${{ runner.temp }}"
+
+  sources:
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: find files
+        run: |
+          find "${{ runner.temp }}"
