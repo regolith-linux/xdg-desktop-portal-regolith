@@ -43,7 +43,7 @@ jobs:
           
       - name: find files
         run: |
-          find "${{ runner.temp }}"
+          find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
 
   sources:
     runs-on: ubuntu-24.04
@@ -51,4 +51,4 @@ jobs:
     steps:
       - name: find files
         run: |
-          find "${{ runner.temp }}"
+          find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
