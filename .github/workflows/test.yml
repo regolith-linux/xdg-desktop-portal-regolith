@@ -29,18 +29,18 @@ jobs:
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
-          ls -la "${{ github.workspace }}"
-          touch ${{ github.workspace }}/in-workspace
-          ls -la "${{ github.workspace }}"
+          ls -la "${{ github.workspace }}/../"
+          touch ${{ github.workspace }}/../in-workspace
+          ls -la "${{ github.workspace }}.../"
       - run: |
           pwd
           ls -la
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
-          ls -la "${{ github.workspace }}"
-          touch ${{ github.workspace }}/in-workspace
-          ls -la "${{ github.workspace }}"
+          ls -la "${{ github.workspace }}/../"
+          touch ${{ github.workspace }}/../in-workspace
+          ls -la "${{ github.workspace }}/../"
 
   # build:
   #   runs-on: ubuntu-24.04
