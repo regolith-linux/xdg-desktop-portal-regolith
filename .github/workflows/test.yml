@@ -15,6 +15,7 @@ jobs:
         with:
           name: "${{ github.event.repository.name }}"
           ref: "${{ github.base_ref }}"
+          # arch: "amd64"
           arch: "amd64 arm64"
           stage: "unstable"
 
@@ -58,7 +59,8 @@ jobs:
   #         ls -la "$WORKSPACE_ROOT_PATH"
 
   build:
-    runs-on: ubuntu-24.04
+    # runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
     container: "${{ matrix.distro }}:${{ matrix.codename }}"
     needs: matrix-builder
     strategy:
