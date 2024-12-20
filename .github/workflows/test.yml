@@ -19,7 +19,7 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
-    # container: "${{ matrix.distro }}:${{ matrix.codename }}"
+    container: "ubuntu:oracular"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
