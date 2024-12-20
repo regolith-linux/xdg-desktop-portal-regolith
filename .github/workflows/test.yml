@@ -59,8 +59,8 @@ jobs:
   #         ls -la "$WORKSPACE_ROOT_PATH"
 
   build:
-    # runs-on: ubuntu-24.04
-    runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
+    runs-on: ubuntu-24.04
+    # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
     container: "${{ matrix.distro }}:${{ matrix.codename }}"
     needs: matrix-builder
     strategy:
@@ -89,6 +89,35 @@ jobs:
   #         server-address: "${{ secrets.KAMATERA_HOSTNAME2 }}"
   #         server-username: "${{ secrets.KAMATERA_USERNAME }}"
   #         server-ssh-key: "${{ secrets.KAMATERA_SSH_KEY }}"
+
+
+
+  # package:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       arch:
+  #         - docker: amd64  # used by docker create --platform
+  #         - docker: arm64
+  #       distro:
+  #         - container: "ubuntu:jammy"
+  #         - container: "ubuntu:focal"
+
+  #   steps:
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v1
+  #       with:
+  #         platforms: ${{ matrix.arch }}
+
+  #     - name: Run in Docker
+  #       run: |
+  #         docker run \
+  #           --rm \
+  #           -v $(pwd):/${{ github.workspace }} \
+  #           -w ${{ github.workspace }} \
+  #           --platform linux/${{ matrix.arch }} \
+  #           ${{ matrix.distro }} \
+  #           uname -a
 
   # sources:
   #   runs-on: ubuntu-24.04
