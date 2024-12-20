@@ -29,6 +29,8 @@ jobs:
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
+          echo "${{ github.workspace }}"
+          realpath "${{ github.workspace }}"
           WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
           ls -la "$WORKSPACE_ROOT_PATH"
           touch $WORKSPACE_ROOT_PATH/in-workspace
@@ -39,6 +41,8 @@ jobs:
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
+          echo "${{ github.workspace }}"
+          realpath "${{ github.workspace }}"
           WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
           ls -la "$WORKSPACE_ROOT_PATH"
           touch $WORKSPACE_ROOT_PATH/in-workspace
