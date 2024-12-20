@@ -29,23 +29,30 @@ jobs:
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
-          echo "${{ github.workspace }}"
-          realpath "${{ github.workspace }}"
-          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
+          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+          echo $WORKSPACE_ROOT_PATH
           ls -la "$WORKSPACE_ROOT_PATH"
           touch $WORKSPACE_ROOT_PATH/in-workspace
           ls -la "$WORKSPACE_ROOT_PATH"
       - run: |
           pwd
           ls -la
-          touch $(pwd)/in-pwd
+          echo "==================================="
+          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+          echo $WORKSPACE_ROOT_PATH
+          ls -la "$WORKSPACE_ROOT_PATH"
+
+  source:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - run: |
+          pwd
           ls -la
           echo "==================================="
-          echo "${{ github.workspace }}"
-          realpath "${{ github.workspace }}"
-          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
-          ls -la "$WORKSPACE_ROOT_PATH"
-          touch $WORKSPACE_ROOT_PATH/in-workspace
+          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+          echo $WORKSPACE_ROOT_PATH
           ls -la "$WORKSPACE_ROOT_PATH"
 
   # build:
