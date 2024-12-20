@@ -4,97 +4,89 @@ on:
   pull_request:
 
 jobs:
-  # matrix-builder:
-  #   runs-on: ubuntu-24.04
-  #   outputs:
-  #     includes: ${{ steps.builder.outputs.includes }}
-  #   steps:
-  #     - name: Build Matrix
-  #       id: builder
-  #       uses: regolith-linux/actions/build-matrix@enhance-build-matrix
-  #       with:
-  #         name: "${{ github.event.repository.name }}"
-  #         ref: "${{ github.base_ref }}"
-  #         stage: "unstable"
-
-  test:
+  matrix-builder:
     runs-on: ubuntu-24.04
-    container: "ubuntu:oracular"
+    outputs:
+      includes: ${{ steps.builder.outputs.includes }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - run: |
-          pwd
-          ls -la
-          touch $(pwd)/in-pwd
-          ls -la
-          echo "==================================="
-          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
-          echo $WORKSPACE_ROOT_PATH
-          ls -la "$WORKSPACE_ROOT_PATH"
-          touch $WORKSPACE_ROOT_PATH/in-workspace
-          ls -la "$WORKSPACE_ROOT_PATH"
-      - run: |
-          pwd
-          ls -la
-          echo "==================================="
-          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
-          echo $WORKSPACE_ROOT_PATH
-          ls -la "$WORKSPACE_ROOT_PATH"
+      - name: Build Matrix
+        id: builder
+        uses: regolith-linux/actions/build-matrix@enhance-build-matrix
+        with:
+          name: "${{ github.event.repository.name }}"
+          ref: "${{ github.base_ref }}"
+          arch: "amd64 arm64"
+          stage: "unstable"
 
-  source:
-    runs-on: ubuntu-24.04
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - run: |
-          pwd
-          ls -la
-          echo "==================================="
-          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
-          echo $WORKSPACE_ROOT_PATH
-          ls -la "$WORKSPACE_ROOT_PATH"
-
-  # build:
+  # test:
   #   runs-on: ubuntu-24.04
-  #   container: "${{ matrix.distro }}:${{ matrix.codename }}"
-  #   needs: matrix-builder
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+  #   container: "ubuntu:oracular"
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v4
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         touch $(pwd)/in-pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+  #         touch $WORKSPACE_ROOT_PATH/in-workspace
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
 
-  #     - name: Build Package
-  #       uses: regolith-linux/actions/build-package@enhance-build-matrix
-  #       with:
-  #         name: "${{ github.event.repository.name }}"
-  #         distro: "${{ matrix.distro }}"
-  #         codename: "${{ matrix.codename }}"
-  #         stage: "unstable"
-  #         suite: "unstable"
-  #         component: "main"
-  #         arch: "amd64"
-  #         gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+  # source:
+  #   runs-on: ubuntu-24.04
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+
+  build:
+    runs-on: ubuntu-24.04
+    container: "${{ matrix.distro }}:${{ matrix.codename }}"
+    needs: matrix-builder
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Package
+        uses: regolith-linux/actions/build-package@enhance-build-matrix
+        with:
+          name: "${{ github.event.repository.name }}"
+          distro: "${{ matrix.distro }}"
+          codename: "${{ matrix.codename }}"
+          stage: "unstable"
+          suite: "unstable"
+          component: "main"
+          arch: "${{ matrix.arch }}"
+          gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
 
   #     - name: Upload Files
   #       uses: regolith-linux/actions/upload-files@main
   #       with:
-  #         name: "${{ github.event.repository.name }}"
-  #         distro: "${{ matrix.distro }}"
-  #         codename: "${{ matrix.codename }}"
-  #         stage: "unstable"
-  #         suite: "unstable"
-  #         component: "main"
-  #         arch: "amd64"
-  #         gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
-          
-  #     - name: find files
-  #       run: |
-  #         find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
+  #         server-address: "${{ secrets.KAMATERA_HOSTNAME2 }}"
+  #         server-username: "${{ secrets.KAMATERA_USERNAME }}"
+  #         server-ssh-key: "${{ secrets.KAMATERA_SSH_KEY }}"
 
   # sources:
   #   runs-on: ubuntu-24.04
