@@ -4,51 +4,88 @@ on:
   pull_request:
 
 jobs:
-  matrix-builder:
-    runs-on: ubuntu-24.04
-    outputs:
-      includes: ${{ steps.builder.outputs.includes }}
-    steps:
-      - name: Build Matrix
-        id: builder
-        uses: regolith-linux/actions/build-matrix@enhance-build-matrix
-        with:
-          name: "${{ github.event.repository.name }}"
-          ref: "${{ github.base_ref }}"
-          stage: "unstable"
+  # matrix-builder:
+  #   runs-on: ubuntu-24.04
+  #   outputs:
+  #     includes: ${{ steps.builder.outputs.includes }}
+  #   steps:
+  #     - name: Build Matrix
+  #       id: builder
+  #       uses: regolith-linux/actions/build-matrix@enhance-build-matrix
+  #       with:
+  #         name: "${{ github.event.repository.name }}"
+  #         ref: "${{ github.base_ref }}"
+  #         stage: "unstable"
 
-  build:
+  test:
     runs-on: ubuntu-24.04
-    container: "${{ matrix.distro }}:${{ matrix.codename }}"
-    needs: matrix-builder
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+    # container: "${{ matrix.distro }}:${{ matrix.codename }}"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - run: |
+          pwd
+          ls -la
+          touch $(pwd)/in-pwd
+          ls -la
+          echo "==================================="
+          ls -la "${{ github.workspace }}"
+          touch ${{ github.workspace }}/in-workspace
+          ls -la "${{ github.workspace }}"
+      - run: |
+          pwd
+          ls -la
+          touch $(pwd)/in-pwd
+          ls -la
+          echo "==================================="
+          ls -la "${{ github.workspace }}"
+          touch ${{ github.workspace }}/in-workspace
+          ls -la "${{ github.workspace }}"
 
-      - name: Build Package
-        uses: regolith-linux/actions/build-package@enhance-build-matrix
-        with:
-          name: "${{ github.event.repository.name }}"
-          distro: "${{ matrix.distro }}"
-          codename: "${{ matrix.codename }}"
-          stage: "unstable"
-          suite: "unstable"
-          component: "main"
-          arch: "amd64"
-          gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+  # build:
+  #   runs-on: ubuntu-24.04
+  #   container: "${{ matrix.distro }}:${{ matrix.codename }}"
+  #   needs: matrix-builder
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Build Package
+  #       uses: regolith-linux/actions/build-package@enhance-build-matrix
+  #       with:
+  #         name: "${{ github.event.repository.name }}"
+  #         distro: "${{ matrix.distro }}"
+  #         codename: "${{ matrix.codename }}"
+  #         stage: "unstable"
+  #         suite: "unstable"
+  #         component: "main"
+  #         arch: "amd64"
+  #         gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+
+  #     - name: Upload Files
+  #       uses: regolith-linux/actions/upload-files@main
+  #       with:
+  #         name: "${{ github.event.repository.name }}"
+  #         distro: "${{ matrix.distro }}"
+  #         codename: "${{ matrix.codename }}"
+  #         stage: "unstable"
+  #         suite: "unstable"
+  #         component: "main"
+  #         arch: "amd64"
+  #         gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
           
-      - name: find files
-        run: |
-          find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
+  #     - name: find files
+  #       run: |
+  #         find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
 
-  sources:
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - name: find files
-        run: |
-          find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
+  # sources:
+  #   runs-on: ubuntu-24.04
+  #   needs: build
+  #   steps:
+  #     - name: find files
+  #       run: |
+  #         find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
