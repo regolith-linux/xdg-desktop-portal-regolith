@@ -29,18 +29,20 @@ jobs:
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
-          ls -la "${{ github.workspace }}/../"
-          touch ${{ github.workspace }}/../in-workspace
-          ls -la "${{ github.workspace }}.../"
+          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
+          ls -la "$WORKSPACE_ROOT_PATH"
+          touch $WORKSPACE_ROOT_PATH/in-workspace
+          ls -la "$WORKSPACE_ROOT_PATH"
       - run: |
           pwd
           ls -la
           touch $(pwd)/in-pwd
           ls -la
           echo "==================================="
-          ls -la "${{ github.workspace }}/../"
-          touch ${{ github.workspace }}/../in-workspace
-          ls -la "${{ github.workspace }}/../"
+          WORKSPACE_ROOT_PATH=$(realpath "$(realpath "${{ github.workspace }}")/../")
+          ls -la "$WORKSPACE_ROOT_PATH"
+          touch $WORKSPACE_ROOT_PATH/in-workspace
+          ls -la "$WORKSPACE_ROOT_PATH"
 
   # build:
   #   runs-on: ubuntu-24.04
