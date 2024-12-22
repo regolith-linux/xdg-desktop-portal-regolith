@@ -1,0 +1,202 @@
+name: Test Build
+
+on:
+  pull_request:
+
+jobs:
+  matrix-builder:
+    runs-on: ubuntu-24.04
+    outputs:
+      includes: ${{ steps.builder.outputs.includes }}
+    steps:
+      - name: Build Matrix
+        id: builder
+        uses: regolith-linux/actions/build-matrix@enhance-build-matrix
+        with:
+          name: "${{ github.event.repository.name }}"
+          ref: "${{ github.base_ref }}"
+          # arch: "amd64"
+          arch: "arm64"
+          # arch: "amd64 arm64"
+          stage: "unstable"
+
+  # test:
+  #   runs-on: ubuntu-24.04
+  #   container: "ubuntu:oracular"
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         touch $(pwd)/in-pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+  #         touch $WORKSPACE_ROOT_PATH/in-workspace
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+
+  # source:
+  #   runs-on: ubuntu-24.04
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - run: |
+  #         pwd
+  #         ls -la
+  #         echo "==================================="
+  #         WORKSPACE_ROOT_PATH=$(realpath "$(realpath "$(pwd)")/../")
+  #         echo $WORKSPACE_ROOT_PATH
+  #         ls -la "$WORKSPACE_ROOT_PATH"
+
+# docker pull arm64v8/ubuntu:oracular
+
+  build:
+    runs-on: ubuntu-24.04
+    # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
+    needs: matrix-builder
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+
+    container:
+      # image: "arm64v8/${{ matrix.distro }}:${{ matrix.codename }}"
+      image: "${{ matrix.distro }}:${{ matrix.codename }}"
+      options: --privileged
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run in Docker
+        run: |
+          ls -la
+          uname -a
+          cat /etc/*-release
+
+      - name: Ensure Sudo
+        uses: regolith-linux/actions/ensure-sudo@enhance-build-matrix
+
+      - name: Environment Setup
+        run: |
+          # Add Docker's official GPG key:
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates curl
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+          # Add the repository to Apt sources:
+          echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update
+
+          DEBIAN_FRONTEND=noninteractive sudo apt install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+      - name: Set up QEMU
+        # if: ${{ matrix.arch != 'x86_64' }}
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.arch }}
+
+      - name: Run in Docker
+        run: |
+          ls -la
+          uname -a
+          cat /etc/*-release
+
+      - name: Build Package
+        uses: regolith-linux/actions/build-package@enhance-build-matrix
+        with:
+          name: "${{ github.event.repository.name }}"
+          distro: "${{ matrix.distro }}"
+          codename: "${{ matrix.codename }}"
+          stage: "unstable"
+          suite: "unstable"
+          component: "main"
+          arch: "${{ matrix.arch }}"
+          gpg-key: "${{ secrets.PACKAGE_PRIVATE_KEY2 }}"
+
+  #     - name: Upload Files
+  #       uses: regolith-linux/actions/upload-files@main
+  #       with:
+  #         server-address: "${{ secrets.KAMATERA_HOSTNAME2 }}"
+  #         server-username: "${{ secrets.KAMATERA_USERNAME }}"
+  #         server-ssh-key: "${{ secrets.KAMATERA_SSH_KEY }}"
+
+
+
+    # - name: Set up QEMU
+    #   uses: docker/setup-qemu-action@v1
+    #   with:
+    #     platforms: ${{ inputs.arch }}
+
+    # - name: Run in Docker
+    #   shell: bash
+    #   run: |
+    #     docker run \
+    #       --rm \
+    #       -v $(pwd):/${{ github.workspace }} \
+    #       -w ${{ github.workspace }} \
+    #       --platform linux/${{ inputs.arch }} \
+    #       ${{ inputs.distro }}:${{ inputs.codename }} \
+    #       uname -a && ls -la
+
+    # - name: Run in Docker
+    #   uses: docker://ubuntu:oracular
+
+    # - name: Run in Docker
+    #   shell: bash
+    #   run: |
+    #     ls -la
+    #     uname -a
+
+
+  # package:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       arch:
+  #         - docker: amd64  # used by docker create --platform
+  #         - docker: arm64
+  #       distro:
+  #         - container: "ubuntu:jammy"
+  #         - container: "ubuntu:focal"
+
+  #   steps:
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v1
+  #       with:
+  #         platforms: ${{ matrix.arch }}
+
+  #     - name: Run in Docker
+  #       run: |
+  #         docker run \
+  #           --rm \
+  #           -v $(pwd):/${{ github.workspace }} \
+  #           -w ${{ github.workspace }} \
+  #           --platform linux/${{ matrix.arch }} \
+  #           ${{ matrix.distro }} \
+  #           uname -a
+
+  # sources:
+  #   runs-on: ubuntu-24.04
+  #   needs: build
+  #   steps:
+  #     - name: find files
+  #       run: |
+  #         find "$(realpath "$(realpath "${{ github.workspace }}")/../")"
