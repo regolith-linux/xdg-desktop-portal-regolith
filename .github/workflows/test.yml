@@ -61,7 +61,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
-    container: "${{ matrix.distro }}:${{ matrix.codename }}"
+    container:
+      image: "${{ matrix.distro }}:${{ matrix.codename }}"
+      options: --privileged
     needs: matrix-builder
     strategy:
       fail-fast: false
