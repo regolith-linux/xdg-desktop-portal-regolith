@@ -16,7 +16,8 @@ jobs:
           name: "${{ github.event.repository.name }}"
           ref: "${{ github.base_ref }}"
           # arch: "amd64"
-          arch: "amd64 arm64"
+          arch: "arm64"
+          # arch: "amd64 arm64"
           stage: "unstable"
 
   # test:
@@ -58,11 +59,13 @@ jobs:
   #         echo $WORKSPACE_ROOT_PATH
   #         ls -la "$WORKSPACE_ROOT_PATH"
 
+# docker pull arm64v8/ubuntu:oracular
+
   build:
     runs-on: ubuntu-24.04
     # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
     container:
-      image: "${{ matrix.distro }}:${{ matrix.codename }}"
+      image: "arm64v8/${{ matrix.distro }}:${{ matrix.codename }}"
       options: --privileged
     needs: matrix-builder
     strategy:
