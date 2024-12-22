@@ -64,14 +64,18 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
-    container:
-      image: "arm64v8/${{ matrix.distro }}:${{ matrix.codename }}"
-      options: --privileged
     needs: matrix-builder
+
     strategy:
       fail-fast: false
       matrix:
         include: ${{ fromJSON(needs.matrix-builder.outputs.includes) }}
+
+    container:
+      # image: "arm64v8/${{ matrix.distro }}:${{ matrix.codename }}"
+      image: "${{ matrix.distro }}:${{ matrix.codename }}"
+      options: --privileged
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
