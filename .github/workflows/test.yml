@@ -73,6 +73,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Run in Docker
+        run: |
+          ls -la
+          uname -a
+          cat /etc/*-release
+
+      - name: Ensure Sudo
+        uses: regolith-linux/actions/ensure-sudo@enhance-build-matrix
+
+      - name: Environment Setup
+        run: |
+          # Add Docker's official GPG key:
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates curl
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+          # Add the repository to Apt sources:
+          echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update
+
+          DEBIAN_FRONTEND=noninteractive sudo apt install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
       - name: Set up QEMU
         # if: ${{ matrix.arch != 'x86_64' }}
         uses: docker/setup-qemu-action@v3
@@ -80,7 +107,6 @@ jobs:
           platforms: ${{ matrix.arch }}
 
       - name: Run in Docker
-        shell: bash
         run: |
           ls -la
           uname -a
