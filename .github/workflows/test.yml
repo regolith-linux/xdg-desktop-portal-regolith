@@ -61,7 +61,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     # runs-on: [self-hosted, Linux, "${{ matrix.arch }}", noble] 
-    # container: "${{ matrix.distro }}:${{ matrix.codename }}"
+    container: "${{ matrix.distro }}:${{ matrix.codename }}"
     needs: matrix-builder
     strategy:
       fail-fast: false
@@ -70,6 +70,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        # if: ${{ matrix.arch != 'x86_64' }}
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.arch }}
+
+      - name: Run in Docker
+        shell: bash
+        run: |
+          ls -la
+          uname -a
+          cat /etc/*-release
 
       - name: Build Package
         uses: regolith-linux/actions/build-package@enhance-build-matrix
@@ -90,6 +103,32 @@ jobs:
   #         server-username: "${{ secrets.KAMATERA_USERNAME }}"
   #         server-ssh-key: "${{ secrets.KAMATERA_SSH_KEY }}"
 
+
+
+    # - name: Set up QEMU
+    #   uses: docker/setup-qemu-action@v1
+    #   with:
+    #     platforms: ${{ inputs.arch }}
+
+    # - name: Run in Docker
+    #   shell: bash
+    #   run: |
+    #     docker run \
+    #       --rm \
+    #       -v $(pwd):/${{ github.workspace }} \
+    #       -w ${{ github.workspace }} \
+    #       --platform linux/${{ inputs.arch }} \
+    #       ${{ inputs.distro }}:${{ inputs.codename }} \
+    #       uname -a && ls -la
+
+    # - name: Run in Docker
+    #   uses: docker://ubuntu:oracular
+
+    # - name: Run in Docker
+    #   shell: bash
+    #   run: |
+    #     ls -la
+    #     uname -a
 
 
   # package:
