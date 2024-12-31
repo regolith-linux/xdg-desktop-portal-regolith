@@ -1,3 +1,9 @@
+xdg-desktop-portal-regolith (0.3.5-3) jammy; urgency=medium
+
+  * fix: update package dependency to use variant also available on jammy
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Mon, 30 Dec 2024 11:26:57 -0800
+
 xdg-desktop-portal-regolith (0.3.5-2) jammy; urgency=medium
 
   * fix: add missing systemd dependency to control to fix build on oracular
