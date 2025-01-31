@@ -1,3 +1,18 @@
+xdg-desktop-portal-regolith (0.3.5-3) jammy; urgency=medium
+
+  [ Regolith Linux ]
+  * fix: remove missing package as build dep for bookworm
+
+  [ Khosrow Moossavi ]
+  * feat: enable github action to test pull requests
+  * feat: enable github action to publish to unstable
+  * feat: enable github action to publish to testing
+  * feat: enable github action to prepare release
+  * chore: use regolith-ci-bot user and token
+  * fix: create release tag from correct git sha
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Fri, 31 Jan 2025 12:23:08 -0500
+
 xdg-desktop-portal-regolith (0.3.5-2) jammy; urgency=medium
 
   * fix: add missing systemd dependency to control to fix build on oracular
