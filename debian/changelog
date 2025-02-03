@@ -1,3 +1,18 @@
+xdg-desktop-portal-regolith (0.3.5-4) jammy; urgency=medium
+
+  [ Anudeep Sanapala ]
+  * feat: Implement set_wallpaper_uri method in Wallpaper.Portal (#3)
+
+  [ Khosrow Moossavi ]
+  * feat: enable github action to test pull requests
+  * feat: enable github action to publish to unstable
+  * feat: enable github action to publish to testing
+  * feat: enable github action to prepare release
+  * chore: use regolith-ci-bot user and token
+  * fix: create release tag from correct git sha
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Mon, 03 Feb 2025 19:32:56 +0000
+
 xdg-desktop-portal-regolith (0.3.5-3) jammy; urgency=medium
 
   * fix: update package dependency to use variant also available on jammy
