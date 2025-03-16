@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 10),
                libgtk-4-dev,
                meson,
                po-debconf,
-               libsystemd-dev,
+               systemd-dev,
                valac-0.56-vapi,
                valac-bin
 Standards-Version: 4.1.2
