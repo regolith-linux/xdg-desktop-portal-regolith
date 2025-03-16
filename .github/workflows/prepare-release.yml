@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - debian-bookworm
+      - ubuntu/jammy
     paths:
       - debian/changelog
 
