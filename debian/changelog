@@ -1,3 +1,15 @@
+xdg-desktop-portal-regolith (0.3.7-1) jammy; urgency=medium
+
+  [ Khosrow Moossavi ]
+  * feat: use build-only to test pull request
+
+  [ Ken Gilmer ]
+  * fix: build regression on plucky.  Seems like meson cannot find correct dependency without updating debian package dependency to slightly different name (#13)
+  * fix: remove unused build dep (#15)
+  * Revert "fix: remove unused build dep (#15)"
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sun, 06 Apr 2025 16:53:31 +0000
+
 xdg-desktop-portal-regolith (0.3.6-1) jammy; urgency=medium
 
   * UNRELEASED
