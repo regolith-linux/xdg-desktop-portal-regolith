@@ -1,3 +1,14 @@
+xdg-desktop-portal-regolith (0.3.7-3) jammy; urgency=medium
+
+  [ Khosrow Moossavi ]
+  * feat: use build-only to test pull request
+  * chore: use correct branch for building jammy
+
+  [ Ken Gilmer ]
+  * fix: remove systemd dep on jammy
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sun, 06 Apr 2025 16:58:47 +0000
+
 xdg-desktop-portal-regolith (0.3.6-1) jammy; urgency=medium
 
   * UNRELEASED
