@@ -1,3 +1,10 @@
+xdg-desktop-portal-regolith (0.3.7-2) jammy; urgency=medium
+
+  [ Khosrow Moossavi ]
+  * feat: use build-only to test pull request
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sun, 06 Apr 2025 16:55:06 +0000
+
 xdg-desktop-portal-regolith (0.3.6-2) jammy; urgency=medium
 
   * UNRELEASED
