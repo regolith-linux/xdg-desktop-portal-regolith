@@ -1,3 +1,10 @@
+xdg-desktop-portal-regolith (0.3.8-2) jammy; urgency=medium
+
+  [ Soumya Ranjan Patnaik ]
+  * fix: dark mode not working (#18)
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Mon, 03 Nov 2025 02:44:50 +0000
+
 xdg-desktop-portal-regolith (0.3.7-2) jammy; urgency=medium
 
   [ Khosrow Moossavi ]
