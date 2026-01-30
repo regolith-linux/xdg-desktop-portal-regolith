@@ -1,3 +1,10 @@
+xdg-desktop-portal-regolith (0.3.10-2) jammy; urgency=medium
+
+  [ Khosrow Moossavi ]
+  * Revert "fix: disable newly added gnome xdp interfaces"
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Fri, 30 Jan 2026 20:37:02 +0000
+
 xdg-desktop-portal-regolith (0.3.9-2) jammy; urgency=medium
 
   [ Soumya Ranjan Patnaik ]
