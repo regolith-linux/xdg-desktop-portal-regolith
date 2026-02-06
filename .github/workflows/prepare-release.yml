@@ -5,8 +5,7 @@ on:
   push:
     branches:
       - main
-      - debian-bookworm
-      - ubuntu/jammy
+      - release/1.18
     paths:
       - debian/changelog
 
