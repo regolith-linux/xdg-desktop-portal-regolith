@@ -1,3 +1,10 @@
+xdg-desktop-portal-regolith (0.3.11-2) jammy; urgency=medium
+
+  [ Khosrow Moossavi ]
+  * chore: track separate release/1.18 branch
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sun, 08 Feb 2026 02:39:58 +0000
+
 xdg-desktop-portal-regolith (0.3.11-0) jammy; urgency=medium
 
   * stage version compatible with xdg-desktop-portal 1.18
