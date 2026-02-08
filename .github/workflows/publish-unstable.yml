@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - release/1.18
+      - release/1.18-systemd
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
