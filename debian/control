@@ -19,8 +19,7 @@ Package: xdg-desktop-portal-regolith
 Architecture: any
 Depends:
   ${shlibs:Depends},
-  ${misc:Depends},
-  libjsonrpc-glib-1.0-dev
+  ${misc:Depends}
 Description: Regolith XDG Portal backend
  Provides access to desktop features to sandboxed apps.
 
