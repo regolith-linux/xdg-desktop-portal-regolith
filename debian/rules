@@ -1,4 +1,14 @@
 #!/usr/bin/make -f
 
+# The X11 portal configuration routes Screenshot to xdg-desktop-portal-gnome.
+# Ubuntu's Regolith installs already have it; on Debian its Recommends would
+# pull in GNOME Shell and gdm3, so it is only a dependency on Ubuntu.
+ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes),yes)
+X11_CONFIG_DEPENDS = xdg-desktop-portal-gnome
+endif
+
 %:
 	dh $@
+
+override_dh_gencontrol:
+	dh_gencontrol -- -Vregolith:X11ConfigDepends="$(X11_CONFIG_DEPENDS)"
