@@ -3,25 +3,21 @@ Section: x11
 Priority: optional
 Maintainer: Ken Gilmer <kgilmer@gmail.com>
 Build-Depends: debhelper (>= 10),
-               gettext,
-               intltool,
-               libglib2.0-dev,
-               libgtk-4-dev,
-               meson,
-               po-debconf,
-               systemd-dev,
-               valac-0.56-vapi,
-               valac-bin
+               meson
 Standards-Version: 4.1.2
 Homepage: https://github.com/regolith-linux/xdg-desktop-portal-regolith
 
 Package: xdg-desktop-portal-regolith
-Architecture: any
+Architecture: all
+Section: oldlibs
 Depends:
-  ${shlibs:Depends},
   ${misc:Depends}
-Description: Regolith XDG Portal backend
- Provides access to desktop features to sandboxed apps.
+Description: transitional package for the retired Regolith portal backend
+ The Regolith XDG portal backend is retired. Regolith uses the GTK, wlroots
+ and GNOME portal backends, as configured by
+ xdg-desktop-portal-regolith-x11-config and
+ xdg-desktop-portal-regolith-wayland-config. Upgrading to this empty package
+ removes the old backend. It can be removed safely.
 
 Package: xdg-desktop-portal-regolith-x11-config
 Architecture: any
