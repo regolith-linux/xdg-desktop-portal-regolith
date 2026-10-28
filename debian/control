@@ -27,12 +27,12 @@ Description: Regolith XDG Portal backend
 Package: xdg-desktop-portal-regolith-x11-config
 Architecture: any
 Depends:
-  xdg-desktop-portal-regolith,
+  xdg-desktop-portal,
   xdg-desktop-portal-gnome
 Description: Regolith X11 XDG Portal configuration file
 
 Package: xdg-desktop-portal-regolith-wayland-config
 Architecture: any
 Depends:
-  xdg-desktop-portal-regolith
+  xdg-desktop-portal
 Description: Regolith Wayland XDG Portal configuration file
