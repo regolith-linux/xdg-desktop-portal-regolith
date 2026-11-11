@@ -29,5 +29,11 @@ Description: Regolith X11 XDG Portal configuration file
 Package: xdg-desktop-portal-regolith-wayland-config
 Architecture: any
 Depends:
-  xdg-desktop-portal (>=1.20)
+  xdg-desktop-portal (>=1.20),
+  xdg-desktop-portal-wlr,
+  slurp,
+  python3
 Description: Regolith Wayland XDG Portal configuration file
+ Also provides regolith-share-picker, which xdg-desktop-portal-wlr runs in
+ Regolith's Wayland session to let the user click the window or monitor
+ to share.

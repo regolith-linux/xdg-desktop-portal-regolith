@@ -1,1 +1,3 @@
 usr/share/xdg-desktop-portal/regolith-wayland-portals.conf
+etc/xdg/xdg-desktop-portal-wlr/Regolith-Wayland
+usr/bin/regolith-share-picker

@@ -3,6 +3,14 @@ install_data(
     install_dir: datadir / 'xdg-desktop-portal'
 )
 
+# xdg-desktop-portal-wlr looks for a configuration file named after each
+# entry of XDG_CURRENT_DESKTOP.
+install_data(
+    'regolith-wayland-wlr.conf',
+    rename: 'Regolith-Wayland',
+    install_dir: sysconfdir / 'xdg' / 'xdg-desktop-portal-wlr'
+)
+
 if build_backend
     install_data(
         'regolith.portal',

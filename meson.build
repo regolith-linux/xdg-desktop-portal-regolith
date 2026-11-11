@@ -1,7 +1,9 @@
 project('xdg-desktop-portal-regolith', version: '7.1.1', meson_version: '>=0.58')
 
 prefix = get_option('prefix')
+bindir = prefix / get_option('bindir')
 datadir = prefix / get_option('datadir')
+sysconfdir = prefix / get_option('sysconfdir')
 libexecdir = prefix / get_option('libexecdir')
 localedir = prefix / get_option('localedir')
 
@@ -50,6 +52,14 @@ if build_backend
 endif
 
 subdir('data')
+
+# The screen-share picker that xdg-desktop-portal-wlr runs in Regolith's
+# Wayland session; see data/regolith-wayland-wlr.conf.
+install_data(
+    'bin' / 'regolith-share-picker',
+    install_dir: bindir,
+    install_mode: 'rwxr-xr-x'
+)
 
 if build_backend
     subdir('src')

@@ -1,0 +1,266 @@
+#!/usr/bin/python3
+"""Pick what to share on screen in Regolith's sway session with a click.
+
+xdg-desktop-portal-wlr runs this program as a dmenu-style chooser (see
+OUTPUT CHOOSER in xdg-desktop-portal-wlr(5)). The sources the application
+accepts arrive on standard input, one per line:
+
+    Monitor: <output name> <description>
+    Window: <title> (<foreign toplevel identifier>)
+
+Versions before 0.8 offer only monitors, as bare output names.
+
+The chosen line is written back to standard output unchanged. Exiting
+without output declines the request.
+
+The person chooses with slurp. Each window on screen is offered as the
+parts of it that are drawn on top, and when monitors are offered the rest
+of each output stands for that output. These boxes never overlap, so
+slurp's preference for the smallest box under the pointer cannot pick a
+window hidden behind another one, and a window covering its whole output
+still wins over the output.
+"""
+
+import json
+import os
+import socket
+import struct
+import subprocess
+import sys
+from typing import NamedTuple, Optional
+
+PROGRAM = "regolith-share-picker"
+
+IPC_MAGIC = b"i3-ipc"
+IPC_HEADER = struct.Struct("=6sII")
+IPC_GET_TREE = 4
+
+# Stacking layers from bottom to top, in the order sway draws them.
+# Floating windows that stay visible next to a fullscreen window are its
+# transients (dialogs), which sway draws above it.
+LAYER_TILING = 0
+LAYER_FLOATING = 1
+LAYER_FULLSCREEN = 2
+LAYER_FULLSCREEN_TRANSIENT = 3
+LAYER_FULLSCREEN_GLOBAL = 4
+LAYER_FULLSCREEN_GLOBAL_TRANSIENT = 5
+
+FULLSCREEN_WORKSPACE = 1
+FULLSCREEN_GLOBAL = 2
+
+# Text exchanged with xdg-desktop-portal-wlr is passed through byte for
+# byte, so that a chosen line always matches the one that was offered.
+ENCODING = "utf-8"
+ERRORS = "surrogateescape"
+
+
+class PickerError(Exception):
+    pass
+
+
+class Rect(NamedTuple):
+    x: int
+    y: int
+    width: int
+    height: int
+
+    @classmethod
+    def from_ipc(cls, rect: dict) -> "Rect":
+        return cls(rect["x"], rect["y"], rect["width"], rect["height"])
+
+    @property
+    def right(self) -> int:
+        return self.x + self.width
+
+    @property
+    def bottom(self) -> int:
+        return self.y + self.height
+
+    def intersection(self, other: "Rect") -> Optional["Rect"]:
+        left, top = max(self.x, other.x), max(self.y, other.y)
+        right, bottom = min(self.right, other.right), min(self.bottom, other.bottom)
+        if right <= left or bottom <= top:
+            return None
+        return Rect(left, top, right - left, bottom - top)
+
+    def subtract(self, other: "Rect") -> list["Rect"]:
+        """Return the part of this rectangle outside other as disjoint pieces."""
+        overlap = self.intersection(other)
+        if overlap is None:
+            return [self]
+        pieces = [
+            Rect(self.x, self.y, self.width, overlap.y - self.y),
+            Rect(self.x, overlap.bottom, self.width, self.bottom - overlap.bottom),
+            Rect(self.x, overlap.y, overlap.x - self.x, overlap.height),
+            Rect(overlap.right, overlap.y, self.right - overlap.right, overlap.height),
+        ]
+        return [piece for piece in pieces if piece.width > 0 and piece.height > 0]
+
+
+def subtract(region: list[Rect], cutters: list[Rect]) -> list[Rect]:
+    for cutter in cutters:
+        region = [piece for rect in region for piece in rect.subtract(cutter)]
+    return region
+
+
+class View(NamedTuple):
+    rect: Rect
+    identifier: Optional[str]
+
+
+class Offers(NamedTuple):
+    monitors: dict[str, str]  # output name -> offered line
+    windows: dict[str, str]  # foreign toplevel identifier -> offered line
+
+
+def read_offers(data: bytes) -> Offers:
+    monitors, windows = {}, {}
+    for line in data.decode(ENCODING, ERRORS).splitlines():
+        if line.startswith("Monitor: "):
+            name = line[len("Monitor: "):].split(" ", 1)[0]
+            monitors[name] = line
+        elif line.startswith("Window: ") and line.endswith(")"):
+            # The title may hold parentheses itself; the identifier never does.
+            identifier = line[line.rfind("(") + 1:-1]
+            windows[identifier] = line
+        elif line and " " not in line:
+            monitors[line] = line
+    return Offers(monitors, windows)
+
+
+def sway_tree() -> dict:
+    path = os.environ.get("SWAYSOCK")
+    if not path:
+        raise PickerError("SWAYSOCK is not set")
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock.connect(path)
+        sock.sendall(IPC_HEADER.pack(IPC_MAGIC, 0, IPC_GET_TREE))
+        with sock.makefile("rb") as reply:
+            header = reply.read(IPC_HEADER.size)
+            if len(header) != IPC_HEADER.size:
+                raise PickerError("sway closed the IPC connection")
+            magic, length, message_type = IPC_HEADER.unpack(header)
+            if magic != IPC_MAGIC or message_type != IPC_GET_TREE:
+                raise PickerError("unexpected reply from sway")
+            payload = reply.read(length)
+            if len(payload) != length:
+                raise PickerError("sway closed the IPC connection")
+    return json.loads(payload)
+
+
+def outputs_of(tree: dict) -> dict[str, Rect]:
+    """Active outputs by name; sway's scratchpad lives on the __i3 pseudo output."""
+    return {
+        node["name"]: Rect.from_ipc(node["rect"])
+        for node in tree.get("nodes", [])
+        if node.get("type") == "output" and not node["name"].startswith("__")
+    }
+
+
+def has_fullscreen(node: dict, mode: int) -> bool:
+    # Workspaces and outputs report fullscreen_mode 1 for i3 compatibility.
+    if node.get("type") in ("con", "floating_con") and node.get("fullscreen_mode") == mode:
+        return True
+    return any(has_fullscreen(child, mode)
+               for child in node.get("nodes", []) + node.get("floating_nodes", []))
+
+
+def views_from_top(tree: dict) -> list[View]:
+    """Views on screen, the one drawn on top first.
+
+    Sway marks views on hidden workspaces, inactive tabs and stack
+    entries, in the scratchpad or behind a fullscreen window as not
+    visible. What remains overlaps only across layers, or among floating
+    windows, which sway lists from the lowest to the most recently raised.
+    """
+    global_fullscreen = has_fullscreen(tree, FULLSCREEN_GLOBAL)
+    stacked = []
+
+    def visit(node: dict, layer: int) -> None:
+        if node.get("type") in ("con", "floating_con"):
+            mode = node.get("fullscreen_mode")
+            if mode == FULLSCREEN_WORKSPACE:
+                layer = LAYER_FULLSCREEN
+            elif mode == FULLSCREEN_GLOBAL:
+                layer = LAYER_FULLSCREEN_GLOBAL
+            if "pid" in node:
+                if node.get("visible"):
+                    view = View(Rect.from_ipc(node["rect"]),
+                                node.get("foreign_toplevel_identifier"))
+                    stacked.append((layer, len(stacked), view))
+                return
+        floating_layer = layer
+        if node.get("type") == "workspace":
+            if global_fullscreen:
+                floating_layer = LAYER_FULLSCREEN_GLOBAL_TRANSIENT
+            elif has_fullscreen(node, FULLSCREEN_WORKSPACE):
+                floating_layer = LAYER_FULLSCREEN_TRANSIENT
+            else:
+                floating_layer = LAYER_FLOATING
+        for child in node.get("nodes", []):
+            visit(child, layer)
+        for child in node.get("floating_nodes", []):
+            visit(child, floating_layer)
+
+    visit(tree, LAYER_TILING)
+    return [view for _layer, _order, view in sorted(stacked, reverse=True)]
+
+
+def choice_boxes(tree: dict, offers: Offers) -> list[tuple[Rect, str]]:
+    """Disjoint boxes, each standing for one offered line."""
+    outputs = outputs_of(tree)
+    window_boxes = []
+    if offers.windows:
+        drawn_above: list[Rect] = []
+        for view in views_from_top(tree):
+            on_screen = [part for part in
+                         (view.rect.intersection(screen) for screen in outputs.values())
+                         if part is not None]
+            shown = subtract(on_screen, drawn_above)
+            drawn_above.append(view.rect)
+            line = offers.windows.get(view.identifier)
+            if line is not None:
+                window_boxes += [(part, line) for part in shown]
+    taken = [part for part, _line in window_boxes]
+    output_boxes = []
+    for name, screen in outputs.items():
+        line = offers.monitors.get(name)
+        if line is not None:
+            output_boxes += [(part, line) for part in subtract([screen], taken)]
+    return output_boxes + window_boxes
+
+
+def pick(boxes: list[tuple[Rect, str]]) -> Optional[str]:
+    """Let the person click one of the boxes; None when they cancel."""
+    choices = "".join(f"{rect.x},{rect.y} {rect.width}x{rect.height} {index}\n"
+                      for index, (rect, _line) in enumerate(boxes))
+    # With -r slurp ignores clicks outside every box and keeps waiting.
+    result = subprocess.run(["slurp", "-r", "-f", "%l"], input=choices,
+                            stdout=subprocess.PIPE, text=True, check=False)
+    if result.returncode != 0:
+        return None
+    try:
+        return boxes[int(result.stdout.strip())][1]
+    except (ValueError, IndexError):
+        raise PickerError(f"unexpected answer from slurp: {result.stdout!r}") from None
+
+
+def main() -> int:
+    offers = read_offers(sys.stdin.buffer.read())
+    try:
+        boxes = choice_boxes(sway_tree(), offers)
+        if not boxes:
+            print(f"{PROGRAM}: nothing on screen can be shared", file=sys.stderr)
+            return 1
+        line = pick(boxes)
+    except (OSError, ValueError, PickerError) as error:
+        print(f"{PROGRAM}: {error}", file=sys.stderr)
+        return 1
+    if line is None:
+        return 1
+    sys.stdout.buffer.write(line.encode(ENCODING, ERRORS) + b"\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
