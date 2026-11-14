@@ -1,3 +1,13 @@
+xdg-desktop-portal-regolith (0.4.0-3) jammy; urgency=medium
+
+  [ Carlos Fernandez Sanz ]
+  * fix: dark mode not working in the X11 session on noble (#32)
+  * fix: route X11 Screenshot to the GNOME portal and disable ScreenCast on noble (#35)
+  * fix: disable the interfaces routed to the deprecated backend on noble (#37)
+  * feat: retire the portal backend (#41)
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sat, 14 Nov 2026 10:49:58 -0800
+
 xdg-desktop-portal-regolith (0.3.11-3) jammy; urgency=medium
 
   [ Khosrow Moossavi ]
