@@ -1,3 +1,11 @@
+xdg-desktop-portal-regolith (0.4.0-2) jammy; urgency=medium
+
+  [ Carlos Fernandez Sanz ]
+  * fix: stop the deprecated backend from answering file chooser and other portals on jammy and bookworm (#36)
+  * feat: retire the portal backend (#40)
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sat, 14 Nov 2026 10:50:42 -0800
+
 xdg-desktop-portal-regolith (0.3.11-2) jammy; urgency=medium
 
   [ Khosrow Moossavi ]
