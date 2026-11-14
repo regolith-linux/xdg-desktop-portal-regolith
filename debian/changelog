@@ -1,3 +1,13 @@
+xdg-desktop-portal-regolith (0.4.0-1) jammy; urgency=medium
+
+  [ Carlos Fernandez Sanz ]
+  * fix: drop libjsonrpc-glib-1.0-dev from the runtime Depends (#33)
+  * fix: route X11 Screenshot to the GNOME portal and disable ScreenCast (#34)
+  * feat: expose the accent colour through the Settings portal (#38)
+  * feat: retire the portal backend (#39)
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sat, 14 Nov 2026 10:48:01 -0800
+
 xdg-desktop-portal-regolith (0.3.11-1) jammy; urgency=medium
 
   * UNRELEASED
